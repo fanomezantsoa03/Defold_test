@@ -1,0 +1,151 @@
+-- camera_controller.script
+
+-- URL de l'objet de jeu à suivre (par exemple, le joueur).
+-- Doit être défini dans l'éditeur ou via un message "set_target".
+go.property("target", msg.url())
+
+-- Facteur d'amortissement pour le mouvement fluide.
+-- Des valeurs plus élevées signifient un suivi plus rapide et moins de lissage.
+go.property("damping_factor", 15.0)
+
+-- Décalage de la caméra par rapport à la position de la cible.
+go.property("offset", vmath.vector3(0, 50, 0)) -- Par exemple, regarder un peu au-dessus du joueur.
+
+-- Activer/Désactiver les limites de la caméra.
+go.property("use_bounds", false)
+go.property("min_x", -1000)
+go.property("max_x", 1000)
+go.property("min_y", -500)
+go.property("max_y", 500)
+
+-- Niveau de zoom de la caméra. 1.0 = normal, < 1.0 = dézoom, > 1.0 = zoom.
+go.property("zoom_level", 1.0)
+
+function init(self)
+	-- Initialise la position actuelle de la caméra à sa propre position de départ.
+	self.current_position = go.get_position()
+	self.initial_z = self.current_position.z -- Conserve le Z initial pour la caméra
+
+	-- Si une cible est définie initialement et valide,
+	-- essayez de positionner la caméra par rapport à elle.
+	if self.target and self.target.socket then
+		local success, target_initial_pos = pcall(go.get_position, self.target)
+		if success then
+			self.current_position = target_initial_pos + self.offset
+			self.current_position.z = self.initial_z -- Applique le Z initial de la caméra
+			go.set_position(self.current_position)
+		else
+			print("Camera_controller: Cible initiale invalide ou non trouvée: " .. msg.sprint(self.target))
+			self.target = nil -- Invalide la cible si elle n'est pas accessible
+		end
+	else
+		self.target = nil -- Assure que la cible est nil si non définie correctement
+	end
+
+	self.view = vmath.matrix4()
+	self.projection = vmath.matrix4()
+end
+
+function update(self, dt)
+	-- Si aucune cible n'est définie ou si la cible n'est pas valide, ne rien faire.
+	if not self.target or not self.target.socket then
+		return
+	end
+
+	-- 1. Obtenir la position actuelle de la cible.
+	local success_get_pos, target_pos = pcall(go.get_position, self.target)
+	if not success_get_pos then
+		-- La cible a peut-être été supprimée.
+		print("Camera_controller: Impossible d'obtenir la position de la cible: " .. msg.sprint(self.target))
+		self.target = nil -- Invalide la cible pour éviter des erreurs répétées.
+		return
+	end
+
+	-- 2. Calculer la position désirée de la caméra (cible + décalage).
+	local desired_pos = target_pos + self.offset
+	desired_pos.z = self.initial_z -- La caméra reste à sa profondeur Z définie.
+
+	-- 3. Appliquer les limites si activées.
+	if self.use_bounds then
+		desired_pos.x = math.max(self.min_x, math.min(desired_pos.x, self.max_x))
+		desired_pos.y = math.max(self.min_y, math.min(desired_pos.y, self.max_y))
+		-- Z n'est généralement pas borné de cette manière pour une caméra 2D.
+	end
+
+	-- 4. Appliquer un mouvement fluide (interpolation exponentielle indépendante du framerate).
+	if dt > 0 then -- Évite les problèmes si dt est nul ou négatif
+		local t = 1.0 - math.exp(-self.damping_factor * dt)
+		self.current_position = vmath.lerp(t, self.current_position, desired_pos)
+	else
+		self.current_position = desired_pos -- Mouvement instantané si dt est invalide
+	end
+
+	-- Mettre à jour la position réelle de l'objet de jeu caméra.
+	go.set_position(self.current_position)
+
+	-- 5. Définir la matrice de vue (View Matrix).
+	-- La caméra regarde depuis sa position actuelle vers "l'avant" (Z négatif dans le système de coordonnées de Defold).
+	-- Le vecteur "up" est (0, 1, 0).
+	self.view = vmath.matrix4_look_at(self.current_position, self.current_position + vmath.vector3(0, 0, -1), vmath.vector3(0, 1, 0))
+
+	-- 6. Définir la matrice de projection orthographique, en tenant compte du zoom.
+	local current_zoom = math.max(0.01, self.zoom_level) -- Empêche un zoom nul ou négatif.
+
+	-- Utilise render.get_width() et render.get_height() pour les dimensions actuelles de la cible de rendu.
+	local view_width = render.get_width() / current_zoom
+	local view_height = render.get_height() / current_zoom
+
+	-- Projection orthographique: gauche, droite, bas, haut, proche, loin.
+	-- Cela centre la vue autour de la position (x,y) de la caméra.
+	self.projection = vmath.matrix4_orthographic(
+	-view_width / 2,  -- gauche
+	view_width / 2,   -- droite
+	-view_height / 2, -- bas
+	view_height / 2,  -- haut
+	-1,               -- plan proche (correspond au défaut du script de rendu Defold)
+	1                 -- plan éloigné (correspond au défaut du script de rendu Defold)
+)
+
+-- 7. Envoyer les matrices de vue et de projection au script de rendu.
+msg.post("@render:", "set_view_projection", { view = self.view, projection = self.projection })
+end
+
+function on_message(self, message_id, message, sender)
+if message_id == hash("set_target") then
+	-- Pour définir la cible : msg.post("/url_camera", "set_target", { url = go.get_url("/objet_joueur") })
+	if message.url and message.url.socket then
+		self.target = message.url
+		print("Camera_controller: Nouvelle cible définie: " .. msg.sprint(self.target))
+		-- Optionnel: "snapper" la caméra immédiatement à la nouvelle cible.
+		local success, target_current_pos = pcall(go.get_position, self.target)
+		if success then
+			self.current_position = target_current_pos + self.offset
+			self.current_position.z = self.initial_z
+			go.set_position(self.current_position)
+		else
+			print("Camera_controller: Impossible d'obtenir la position de la nouvelle cible: " .. msg.sprint(self.target))
+		end
+	else
+		print("Camera_controller: Tentative de définition d'une cible invalide.")
+		self.target = nil -- Efface la cible si l'URL fournie est invalide.
+	end
+elseif message_id == hash("set_zoom") then
+	-- Pour changer le zoom : msg.post("#", "set_zoom", { level = 1.5 })
+	if message.level and message.level > 0 then
+		self.zoom_level = message.level
+	else
+		print("Camera_controller: Niveau de zoom invalide reçu: " .. tostring(message.level))
+	end
+elseif message_id == hash("set_bounds_active") then
+	-- Pour activer/désactiver les limites : msg.post("#", "set_bounds_active", { active = true })
+	if type(message.active) == "boolean" then
+		self.use_bounds = message.active
+	end
+elseif message_id == hash("set_bounds_rect") then
+	-- Pour définir les limites : msg.post("#", "set_bounds_rect", { min_x = 0, max_x = 1024, min_y = 0, max_y = 768 })
+	self.min_x = message.min_x or self.min_x
+	self.max_x = message.max_x or self.max_x
+	self.min_y = message.min_y or self.min_y
+	self.max_y = message.max_y or self.max_y
+end
+end

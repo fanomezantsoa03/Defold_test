@@ -1,0 +1,215 @@
+images {
+  image: "/main/asset/idle/fighter_Idle_0001.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_8
+}
+animations {
+  id: "Idle"
+  images {
+    image: "/main/asset/idle/fighter_Idle_0001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/idle/fighter_Idle_0002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/idle/fighter_Idle_0003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/idle/fighter_Idle_0004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/idle/fighter_Idle_0005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/idle/fighter_Idle_0006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/idle/fighter_Idle_0007.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/idle/fighter_Idle_0008.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 8
+}
+animations {
+  id: "Walk"
+  images {
+    image: "/main/asset/walk/fighter_walk_0009.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/walk/fighter_walk_0010.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/walk/fighter_walk_0011.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/walk/fighter_walk_0012.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/walk/fighter_walk_0013.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/walk/fighter_walk_0014.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/walk/fighter_walk_0015.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/walk/fighter_walk_0016.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 8
+}
+animations {
+  id: "Run"
+  images {
+    image: "/main/asset/run/fighter_run_0017.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/run/fighter_run_0018.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/run/fighter_run_0019.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/run/fighter_run_0020.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/run/fighter_run_0021.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/run/fighter_run_0022.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/run/fighter_run_0023.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/run/fighter_run_0024.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 8
+}
+animations {
+  id: "Attack1"
+  images {
+    image: "/main/asset/attack01/fighter_combo_0064.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack01/fighter_combo_0065.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack01/fighter_combo_0066.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack01/fighter_combo_0067.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack01/fighter_combo_0068.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 5
+}
+animations {
+  id: "Attack2"
+  images {
+    image: "/main/asset/attack02/fighter_combo_0068.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack02/fighter_combo_0069.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack02/fighter_combo_0070.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack02/fighter_combo_0071.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack02/fighter_combo_0072.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack02/fighter_combo_0073.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack02/fighter_combo_0074.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 7
+}
+animations {
+  id: "Attack3"
+  images {
+    image: "/main/asset/attack03/fighter_combo_0074.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack03/fighter_combo_0075.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack03/fighter_combo_0076.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack03/fighter_combo_0077.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack03/fighter_combo_0078.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack03/fighter_combo_0079.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack03/fighter_combo_0080.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack03/fighter_combo_0081.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  images {
+    image: "/main/asset/attack03/fighter_combo_0082.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_8
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 9
+}
+extrude_borders: 2
